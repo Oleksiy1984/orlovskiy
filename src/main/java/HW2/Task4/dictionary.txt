@@ -1,0 +1,8 @@
+white белый
+black черный
+red красный
+tool инструмент
+device устройство
+advice совет
+concern беспокойство
+perform выполнять
