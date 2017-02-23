@@ -206,11 +206,12 @@ public class DAOTest {
         Connection cn = null;
         PreparedStatement pst = null;
 
-        engine.setId(1);
         car.setModel("Volvo");
         car.setMake(new SimpleDateFormat("yyyy-MM-dd").parse("2014-11-11"));
         car.setPrice(155000);
         car.setEngine(engine);
+        car.getEngine().setId(1);
+
         //insert car and get id from database
         Car c=dao.insertCar(car);
         int id_fromDB=c.getId();
@@ -218,14 +219,12 @@ public class DAOTest {
 
         //get inserted car from database
         Car selectedCar=new Car();
-        Engine selectedEngine=new Engine();
+        selectedCar.setEngine(new Engine());
         try {
             cn = ConnectorDB.getConnection();
-            pst =cn.prepareStatement("SELECT c.id,c.model,c.make,c.price,e.id,e.displacement,e.power\n" +
-                    "FROM car c \n" +
-                    "INNER JOIN engine e \n" +
-                    "ON c.id_engine=e.id \n" +
-                    "WHERE c.id=?");
+            pst =cn.prepareStatement("SELECT id,model,make,price,id_engine\n" +
+                    "FROM car \n" +
+                    "WHERE id=?");
             pst.setInt(1, id_fromDB);
             ResultSet resultSet = pst.executeQuery();
             while (resultSet.next()) {
@@ -233,11 +232,7 @@ public class DAOTest {
                 selectedCar.setModel(resultSet.getString(2));
                 selectedCar.setMake(resultSet.getDate(3));
                 selectedCar.setPrice(resultSet.getInt(4));
-                //get and put the engine in our car
-                selectedEngine.setId(resultSet.getInt(5));
-                selectedEngine.setDisplacement(resultSet.getDouble(6));
-                selectedEngine.setPower(resultSet.getInt(7));
-                selectedCar.setEngine(selectedEngine);
+                selectedCar.getEngine().setId(resultSet.getInt(5));
             }
 
         } catch (SQLException e) {
