@@ -55,6 +55,28 @@ public class Car {
    }
 
    @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      Car car = (Car) o;
+
+      if (id != car.id) return false;
+      if (price != car.price) return false;
+      if (!model.equals(car.model)) return false;
+      return make.equals(car.make);
+   }
+
+   @Override
+   public int hashCode() {
+      int result = id;
+      result = 31 * result + model.hashCode();
+      result = 31 * result + make.hashCode();
+      result = 31 * result + price;
+      return result;
+   }
+
+   @Override
    public String toString() {
       return "Car{" +
               "id=" + id +
