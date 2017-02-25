@@ -56,13 +56,11 @@ public class Car {
 
    @Override
    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if ( !(o instanceof Car)) return false;
 
       Car car = (Car) o;
 
       if (id != car.id) return false;
-      if (price != car.price) return false;
       if (!model.equals(car.model)) return false;
       return make.equals(car.make);
    }
@@ -72,7 +70,6 @@ public class Car {
       int result = id;
       result = 31 * result + model.hashCode();
       result = 31 * result + make.hashCode();
-      result = 31 * result + price;
       return result;
    }
 
