@@ -12,6 +12,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "set")
 public class Engine {
     private int id;
     private double displacement;
@@ -19,39 +20,6 @@ public class Engine {
     //@OneToMany
     private Set<Car> set;
 
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public double getDisplacement() {
-        return displacement;
-    }
-
-    public void setDisplacement(double displacement) {
-        this.displacement = displacement;
-    }
-
-    public int getPower() {
-        return power;
-    }
-
-    public void setPower(int power) {
-        this.power = power;
-    }
-
-    public Set<Car> getSet() {
-        return set;
-    }
-
-    public void setSet(Set<Car> set)
-    {
-       this.set = set;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -76,13 +44,5 @@ public class Engine {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "Engine{" +
-                "id=" + id +
-                ", displacement=" + displacement +
-                ", power=" + power +
-                '}';
-    }
 
 }
