@@ -1,10 +1,17 @@
 package HW5;
 
+import lombok.*;
+
 import java.util.Set;
 
 /**
  * @author Alexey.
  */
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Engine {
     private int id;
     private double displacement;

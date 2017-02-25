@@ -33,22 +33,21 @@ public class DAOManager {
             "VALUES(?,?);";
 
     public Car getCarById(int id){
-        Car car = new Car();
-        Engine engine =new Engine();
+        Car car=new Car();
+        Engine engine;
         //using try-with-resources statement
         try(PreparedStatement st =cn.prepareStatement(getCarById)) {
             st.setInt(1, id);
             ResultSet resultSet = st.executeQuery();
             while (resultSet.next()) {
-                car.setId(id);
-                car.setModel(resultSet.getString(2));
-                car.setMake(resultSet.getDate(3));
-                car.setPrice(resultSet.getInt(4));
-                //get and put the engine in our car
-                engine.setId(resultSet.getInt(5));
-                engine.setDisplacement(resultSet.getDouble(6));
-                engine.setPower(resultSet.getInt(7));
-                car.setEngine(engine);
+              engine= Engine.builder().id(resultSet.getInt(5))
+                        .displacement(resultSet.getDouble(6))
+                        .power(resultSet.getInt(7)).build();
+
+               car= Car.builder().id(id).model(resultSet.getString(2))
+                        .make(resultSet.getDate(3))
+                        .price(resultSet.getInt(4))
+                        .engine(engine).build();
             }
 
         } catch (SQLException e) {
@@ -64,17 +63,16 @@ public class DAOManager {
             st.setInt(1, id);
             ResultSet resultSet = st.executeQuery();
             while (resultSet.next()) {
-                Car car = new Car();
-                engine.setId(id);
-                engine.setDisplacement(resultSet.getDouble(2));
-                engine.setPower(resultSet.getInt(3));
+                engine=Engine.builder().id(id).displacement(resultSet.getDouble(2))
+                        .power(resultSet.getInt(3)).build();
                 //Lets do our relationship bidirectional
                 if (resultSet.getInt(4)!=0) {
-                    car.setId(resultSet.getInt(4));
-                    car.setModel(resultSet.getString(5));
-                    car.setMake(resultSet.getDate(6));
-                    car.setPrice(resultSet.getInt(7));
-                    car.setEngine(engine);
+                    Car car=Car.builder().id(resultSet.getInt(4))
+                            .model(resultSet.getString(5))
+                            .make(resultSet.getDate(6))
+                            .price(resultSet.getInt(7))
+                            .engine(engine).build();
+
                     set.add(car);
                     //adding set of cars to our one engine
                     engine.setSet(set);
@@ -139,7 +137,7 @@ public class DAOManager {
 
     public Engine insertEngine(Engine engine){
 
-        try(PreparedStatement st = cn.prepareStatement(insertEngine,Statement.RETURN_GENERATED_KEYS)) {
+        try(PreparedStatement st = cn.prepareStatement(insertEngine, Statement.RETURN_GENERATED_KEYS)) {
             st.setDouble(1, engine.getDisplacement());
             st.setInt(2, engine.getPower());
             st.executeUpdate();

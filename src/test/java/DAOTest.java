@@ -27,15 +27,10 @@ public class DAOTest {
         cn.setAutoCommit(false);
         //create test objects
         dao = new DAOManager(cn);
-        car = new Car();
-        engine = new Engine();
-        engine.setPower(90);
-        engine.setDisplacement(2.2);
-        car.setEngine(engine);
-        car.getEngine().setId(1);
-        car.setMake(new SimpleDateFormat("yyyy-MM-dd").parse("2010-01-01"));
-        car.setPrice(99000);
-        car.setModel("BMW3");
+        engine = Engine.builder().id(1).displacement(2.2).power(90).build();
+        car = Car.builder().engine(engine).
+                make(new SimpleDateFormat("yyyy-MM-dd").parse("2010-01-01")).price(99000)
+                .model("BMW3").build();
     }
 
     @After

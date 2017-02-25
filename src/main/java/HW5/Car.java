@@ -1,10 +1,18 @@
 package HW5;
 
+import lombok.*;
+
 import java.util.Date;
 
 /**
  * @author Alexey.
  */
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Car {
    private int id;
    private String model;
@@ -13,46 +21,6 @@ public class Car {
    //@ManyToOne
    private Engine engine;
 
-   public int getId() {
-      return id;
-   }
-
-
-   public void setId(int id) {
-      this.id = id;
-   }
-
-   public String getModel() {
-      return model;
-   }
-
-   public void setModel(String model) {
-      this.model = model;
-   }
-
-   public Date getMake() {
-      return make;
-   }
-
-   public void setMake(Date make) {
-      this.make = make;
-   }
-
-   public int getPrice() {
-      return price;
-   }
-
-   public void setPrice(int price) {
-      this.price = price;
-   }
-
-   public Engine getEngine() {
-      return engine;
-   }
-
-   public void setEngine(Engine engine) {
-      this.engine = engine;
-   }
 
    @Override
    public boolean equals(Object o) {
@@ -73,14 +41,4 @@ public class Car {
       return result;
    }
 
-   @Override
-   public String toString() {
-      return "Car{" +
-              "id=" + id +
-              ", model='" + model + '\'' +
-              ", make=" + make +
-              ", price=" + price +
-              ", engine=" + engine +
-              '}';
-   }
 }
