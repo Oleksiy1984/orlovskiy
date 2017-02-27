@@ -8,8 +8,6 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-
 @Entity
 @Table(name = "mechanic")
 public class Mechanic {
@@ -26,8 +24,18 @@ public class Mechanic {
     private String surname;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", insertable=false, updatable=false)
-    private ServiceStations stations;
+    @JoinColumn(name = "ss_id")
+    private ServiceStations station;
+
+    @Override
+    public String toString() {
+        return "Mechanic{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", station, id=" + station.getId() +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

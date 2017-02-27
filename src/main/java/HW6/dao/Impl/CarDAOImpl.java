@@ -13,32 +13,27 @@ import java.sql.SQLException;
 
 public class CarDAOImpl implements CarDAO{
 
-    public CarDAOImpl() {
-        factory = HibernateUtil.getSessionFactory();
-        session = factory.openSession();
-        tx = session.beginTransaction();
-    }
 
-    public SessionFactory factory =null;
-    public Session session=null;
-    public Transaction tx=null;
+    public SessionFactory factory=HibernateUtil.getSessionFactory();
 
     public Car addCar(Car car) throws SQLException {
 
-            try{
-                //tx = session.beginTransaction();
+            try(//SessionFactory factory = HibernateUtil.getSessionFactory();
+            Session session=factory.openSession()){
+                Transaction tx = session.beginTransaction();
                 session.save(car);
-                //tx.commit();
+                tx.commit();
             } catch (Exception e) {e.printStackTrace();}
             return car;
         }
 
         public Car updateCar(Car car) throws SQLException {
 
-            try {
-                //tx = session.beginTransaction();
+            try(//SessionFactory factory = HibernateUtil.getSessionFactory();
+                Session session=factory.openSession()){
+                Transaction tx = session.beginTransaction();
                 session.update(car);
-               // tx.commit();
+                tx.commit();
             } catch (Exception e) { e.printStackTrace();}
             return car;
         }
@@ -46,16 +41,19 @@ public class CarDAOImpl implements CarDAO{
 
         public Car getCarById(Long car_id) throws SQLException {
             Car car = null;
-            try {
+            try(//SessionFactory factory = HibernateUtil.getSessionFactory();
+                Session session=factory.openSession()){
                 car = session.get(Car.class, car_id);
             } catch (Exception e) {e.printStackTrace();}
             return car;
         }
 
     public void deleteCar(Car car) throws SQLException {
-        try {
+        try(//SessionFactory factory = HibernateUtil.getSessionFactory();
+            Session session=factory.openSession()){
+            Transaction tx = session.beginTransaction();
             session.delete(car);
-            //tx.commit();
+            tx.commit();
         } catch (Exception e) {e.printStackTrace();}
     }
     }

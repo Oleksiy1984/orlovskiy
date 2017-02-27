@@ -4,75 +4,58 @@ import HW6.dao.ServiceStationsDAO;
 import HW6.model.ServiceStations;
 import HW6.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.sql.SQLException;
 
 
 public class ServiceStationsDAOImpl implements ServiceStationsDAO {
 
-    public void addStation(ServiceStations station) throws SQLException {
-        Session session = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+    public SessionFactory factory=HibernateUtil.getSessionFactory();
+
+    public ServiceStations addStation(ServiceStations station) throws SQLException {
+        try(Session session= factory.openSession()) {
+            Transaction tx = session.beginTransaction();
             session.save(station);
-            session.getTransaction().commit();
+            tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-
-                session.close();
-            }
         }
+        return station;
     }
 
     public void updateStation(ServiceStations station) throws SQLException {
-        Session session = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+        try(//SessionFactory factory=HibernateUtil.getSessionFactory();
+            Session session= factory.openSession()) {
+            Transaction tx = session.beginTransaction();
             session.update(station);
-            session.getTransaction().commit();
+            tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
     }
 
 
     public ServiceStations getStationById(Long station_id) throws SQLException {
-        Session session = null;
         ServiceStations station = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
+        try(//SessionFactory factory=HibernateUtil.getSessionFactory();
+            Session session= factory.openSession()) {
             station = session.get(ServiceStations.class, station_id);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
         return station;
     }
 
     public void deleteStation(ServiceStations station) throws SQLException {
-        Session session = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+        try(//SessionFactory factory=HibernateUtil.getSessionFactory();
+            Session session= factory.openSession()) {
+            Transaction tx = session.beginTransaction();
             session.delete(station);
-            session.getTransaction().commit();
+            tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
     }
 }

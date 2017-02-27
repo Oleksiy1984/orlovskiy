@@ -25,7 +25,7 @@ public class ServiceStations {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "stations")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "station")
     private Set<Mechanic> mechanics = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "stations")

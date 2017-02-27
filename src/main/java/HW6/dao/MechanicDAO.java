@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 
 public interface MechanicDAO {
-    void addMechanic(Mechanic mechanic) throws SQLException;
+    Mechanic addMechanic(Mechanic mechanic) throws SQLException;
     void updateMechanic(Mechanic mechanic) throws SQLException;
     Mechanic getMechanicById(Long mechanic_id) throws SQLException;
     void deleteMechanic(Mechanic mechanic) throws SQLException;

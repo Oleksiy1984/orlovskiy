@@ -11,7 +11,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "stations")
 
 @Entity
 @Table(name = "car")
@@ -40,8 +40,8 @@ public class Car {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "car_ss", joinColumns = {
-            @JoinColumn(name = "id_car", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "id_ss",
+            @JoinColumn(name = "id_car", referencedColumnName = "id",nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "id_ss", referencedColumnName = "id",
                     nullable = false, updatable = false)})
     private Set<ServiceStations> stations = new HashSet<>();
 
