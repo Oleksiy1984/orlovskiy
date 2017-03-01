@@ -3,14 +3,14 @@ package HW6;
 import HW6.dao.Impl.MechanicDAOImpl;
 import HW6.dao.Impl.ServiceStationsDAOImpl;
 import HW6.dao.MechanicDAO;
-import HW6.dao.ServiceStationsDAO;
 import HW6.model.Mechanic;
 import HW6.model.ServiceStations;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.sql.SQLException;
 
 /**
@@ -19,27 +19,32 @@ import java.sql.SQLException;
 public class TestMechanicDAO {
 
     private Mechanic mechanic=null;
-    private MechanicDAOImpl mechDAO=null;
+    private MechanicDAO mechDAO=null;
     private ServiceStationsDAOImpl dao=null;
-    private ServiceStations station;
+    private ServiceStations station=null;
+    private Transaction tx=null;
+    private Session session=null;
 
     @Before
     public void setUp() throws Exception {
         dao= new ServiceStationsDAOImpl();
-        station=dao.getStationById(1L);
-
+        station=ServiceStations.builder().address("Lviv").build();
+        dao.addStation(station);
         mechDAO = new MechanicDAOImpl();
-        mechanic = Mechanic.builder().name("Ron").surname("Ostling")
-                .station(station).build();
-
+        mechanic = Mechanic.builder().station(station).name("Ron").surname("Ostling")
+                .build();
     }
 
     @After
     public void cleanup() throws Exception {
+        session.close();
+        dao.deleteStation(station);
         dao.factory.close();
         mechDAO.factory.close();
+        dao=null;
         mechDAO=null;
         mechanic=null;
+        station=null;
     }
 
     @Test
@@ -48,17 +53,68 @@ public class TestMechanicDAO {
         //insert
         Mechanic insertedMechanic = mechDAO.addMechanic(mechanic);
         Assert.assertNotNull(insertedMechanic.getId());
-        mechanic.setId(insertedMechanic.getId());
         Assert.assertEquals(mechanic, insertedMechanic);
-        System.out.println(mechanic);
-        System.out.println(station);
+        //delete
+        session= mechDAO.factory.openSession();
+            Transaction tx = session.beginTransaction();
+            session.delete(mechanic);
+            tx.commit();
+    }
+
+    @Test
+    public void testUpdateMechanic() throws SQLException {
+        //insert
+        session= mechDAO.factory.openSession();
+        tx = session.beginTransaction();
+        session.save(mechanic);
+        tx.commit();
+        session.close();
+        //update
+        mechanic.setName("Andrey");
+        Mechanic newMechanic = mechDAO.updateMechanic(mechanic);
+        Assert.assertEquals(mechanic, newMechanic);
+        //delete
+        session= mechDAO.factory.openSession();
+        Transaction tx = session.beginTransaction();
+        session.delete(mechanic);
+        tx.commit();
+    }
+
+    @Test
+    public void testGetMechanic() throws SQLException {
+        //insert
+        session= mechDAO.factory.openSession();
+        tx = session.beginTransaction();
+        session.save(mechanic);
+        tx.commit();
+        session.close();
+        //get
+        Mechanic selectedMechanic = mechDAO.getMechanicById(mechanic.getId());
+        Assert.assertNotNull(selectedMechanic.getId());
+        Assert.assertEquals(mechanic, selectedMechanic);
+        //delete
+        session= mechDAO.factory.openSession();
+        Transaction tx = session.beginTransaction();
+        session.delete(mechanic);
+        tx.commit();
     }
 
     @Test
     public void testDeleteMechanic() throws SQLException {
-
-        Mechanic m=mechDAO.getMechanicById(13L);
-        mechDAO.deleteMechanic(m);
+        //insert
+        session= mechDAO.factory.openSession();
+        tx = session.beginTransaction();
+        session.save(mechanic);
+        tx.commit();
+        session.close();
+        //delete
+        mechDAO.deleteMechanic(mechanic);
+        //try to get mechanic
+        session = mechDAO.factory.openSession();
+        tx = session.beginTransaction();
+        Mechanic selectedMechanic = session.get(Mechanic.class, mechanic.getId());
+        tx.commit();
+        Assert.assertNull(selectedMechanic);
     }
 
 }

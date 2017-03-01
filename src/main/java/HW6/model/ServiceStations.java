@@ -2,6 +2,7 @@ package HW6.model;
 
 import lombok.*;
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +29,11 @@ public class ServiceStations {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "station")
     private Set<Mechanic> mechanics = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "stations")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "car_ss", joinColumns = {
+            @JoinColumn(name = "id_ss", referencedColumnName = "id",nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "id_car", referencedColumnName = "id",
+                    nullable = false, updatable = false)})
     private Set<Car> cars = new HashSet<>();
 
     @Override
