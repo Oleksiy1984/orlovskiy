@@ -10,15 +10,21 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class TestCarDAO {
 
-    private Car car=null;
-    private CarDAO carDAO=null;
+    private Car car = null;
+    private CarDAO carDAO = null;
     private Transaction tx;
     private Session session;
 
@@ -37,7 +43,7 @@ public class TestCarDAO {
     public void cleanup() throws Exception {
         session.close();
         carDAO.factory.close();
-        car=null;
+        car = null;
     }
 
     @Test
@@ -49,10 +55,11 @@ public class TestCarDAO {
         Assert.assertEquals(car, insertedCar);
         //delete
         session = carDAO.factory.openSession();
-            tx = session.beginTransaction();
-            session.delete(car);
-            tx.commit();
+        tx = session.beginTransaction();
+        session.delete(car);
+        tx.commit();
     }
+
     @Test
     public void testSelectCar() throws SQLException {
         //insert
@@ -69,6 +76,7 @@ public class TestCarDAO {
         session.delete(car);
         tx.commit();
     }
+
     @Test
     public void testUpdateCar() throws SQLException {
 
@@ -86,6 +94,7 @@ public class TestCarDAO {
         session.delete(car);
         tx.commit();
     }
+
     @Test
     public void testDeleteCar() throws SQLException {
         //insert
@@ -104,4 +113,19 @@ public class TestCarDAO {
         Assert.assertNull(selectedCar);
     }
 
+    @Test
+    public void test() throws SQLException {
+        List<Car> students = new ArrayList<>();
+        session = carDAO.factory.openSession();
+        tx = session.beginTransaction();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Car> criteriaQuery = builder.createQuery(Car.class);
+        Root<Car> root = criteriaQuery.from(Car.class);
+        criteriaQuery.select(root);
+        criteriaQuery.orderBy(builder.asc(root.get("id")));
+        students = session.createQuery(criteriaQuery).getResultList();
+        tx.commit();
+        System.out.println(students);
+
+    }
 }

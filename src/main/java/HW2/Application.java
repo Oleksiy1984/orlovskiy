@@ -12,15 +12,15 @@ import HW2.Task7.Task7;
 
 public class Application {
     public static void main(String[] args) {
-/*
-        Task1.print();
-        Task2.print();
-        Task3.print();
-        Task4.print();
-        Task5.print();
-        Task6.print();
-        */
-        Task7.print();
+
+        //Task1.print();
+        //Task2.print();
+//        Task3.print();
+//        Task4.print();
+//        Task5.print();
+//        Task6.print();
+
+        //Task7.print();
 
         //Task8.print();
     }

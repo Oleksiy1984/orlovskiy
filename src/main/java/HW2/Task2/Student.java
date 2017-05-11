@@ -38,4 +38,12 @@ public class Student {
         result = 31 * result + course;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", course=" + course +
+                '}';
+    }
 }
